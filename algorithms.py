@@ -49,6 +49,31 @@ def insertion_sort(arr):
         arr[j + 1] = key
 
 
+def heap_sort(arr):
+    """Sort in place using a max heap; O(n log n) worst-case time, O(1) space."""
+    def sift_down(root, heap_size):
+        # Move the root down until each parent is at least as large as its children.
+        while 2 * root + 1 < heap_size:
+            child = 2 * root + 1
+            # Choose the larger child to preserve the max-heap property.
+            if child + 1 < heap_size and arr[child] < arr[child + 1]:
+                child += 1
+            if arr[root] >= arr[child]:
+                return
+            arr[root], arr[child] = arr[child], arr[root]
+            root = child
+
+    n = len(arr)
+    # Build the max heap bottom-up in O(n); leaves already satisfy the property.
+    for root in range(n // 2 - 1, -1, -1):
+        sift_down(root, n)
+
+    # Put the largest remaining value at the end, then repair the smaller heap.
+    for end in range(n - 1, 0, -1):
+        arr[0], arr[end] = arr[end], arr[0]
+        sift_down(0, end)
+
+
 def merge(arr, left, mid, right):
     n1 = mid - left + 1
     n2 = right - mid

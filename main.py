@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 
 from algorithms import (
     bubble_sort,
+    heap_sort,
     insertion_sort,
     merge_sort,
     quick_sort,
@@ -27,9 +28,9 @@ def to_micro_seconds(time_taken):
 
 
 # Ask user which sorting alrgorithms he wants to test
-# 'bubble' , 'selection' , 'instertion' , 'merge' , 'quick' then 'q' to quit or 'all' for all
+# 'bubble', 'selection', 'insertion', 'merge', 'quick', 'heap'; 'q' finishes selection
 print(
-    "Enter desired algos here('bubble' , 'selection' , 'instertion' , 'merge' , 'quick') then 'q' to quit or 'all' for all "
+    "Enter desired algos here('bubble' , 'selection' , 'insertion' , 'merge' , 'quick' , 'heap') then 'q' to quit or 'all' for all "
 )
 algos = {
     "bubble": ["bubble", False],
@@ -37,6 +38,7 @@ algos = {
     "insertion": ["insertion", False],
     "merge": ["merge", False],
     "quick": ["quick", False],
+    "heap": ["heap", False],
 }
 while True:
     algo = input("Desired algorithm : ")
@@ -50,7 +52,7 @@ while True:
         algos[algo][1] = True
     except KeyError:
         print(
-            "The algo name you entered is incorrect choose from ('bubble' , 'selection' , 'instertion' , 'merge' , 'quick' )"
+            "The algo name you entered is incorrect choose from ('bubble' , 'selection' , 'insertion' , 'merge' , 'quick' , 'heap')"
         )
 
 
@@ -79,7 +81,7 @@ while True:
         print("That is not a valid number , try again (Enter 'q' when finished)")
 
 
-results = {"bubble": [], "selection": [], "insertion": [], "merge": [], "quick": []}
+results = {"bubble": [], "selection": [], "insertion": [], "merge": [], "quick": [], "heap": []}
 n = len(sizes)
 
 # comment out print statement if needed
@@ -162,6 +164,21 @@ for size in sizes:
                 total_time,
             )
 
+    if algos["heap"][1] == True:
+        arr6 = arr.copy()
+        start = time.perf_counter()
+        heap_sort(arr6)
+        end = time.perf_counter()
+        total_time = to_micro_seconds(end - start)
+        results["heap"].append(total_time)
+        if print_output == "y":
+            print(
+                "Heap sort sorted array : ",
+                arr6,
+                "Time taken(micro seconds) : ",
+                total_time,
+            )
+
     print("\n")
 
 
@@ -176,6 +193,8 @@ if len(results["merge"]) != 0:
     plt.plot(sizes, results["merge"], marker="o", label="merge Sort")
 if len(results["quick"]) != 0:
     plt.plot(sizes, results["quick"], marker="o", label="Quick Sort")
+if len(results["heap"]) != 0:
+    plt.plot(sizes, results["heap"], marker="o", label="Heap Sort")
 plt.xlabel("Array Size")
 plt.ylabel("Runtime (micro seconds)")
 plt.title("Sorting Algorithm Runtime")
